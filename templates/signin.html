@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CMS管理系统</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'auth.css' %}" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-signin" method="post">
+        <h2 class="form-signin-heading">请登录</h2>
+        <label for="inputEmail" class="sr-only">用户名</label>
+        <input type="text"  class="form-control" name='username' placeholder="用户名" >
+
+          <label for="inputPassword" class="sr-only">密码</label>
+
+        <input type="password" class="form-control" name='password' placeholder="密码" >
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">立即登录</button>
+          <div style="text-align: center;margin-top: 10px;" class="form-group">
+                <a href="{% url 'signup' %}" class="sign-link">没有账号？立即注册</a>
+
+            </div>
+      </form>
+    </div>
+    <p style="display:none;color:red;text-align:center;" class="text-danger" id="message-p"></p>
+  <script>
+$(function () {
+   $("#submit").click(function (event) {
+       event.preventDefault();
+       var usernameE = $("input[name='username']");
+       var passwordE = $("input[name='password']");
+       var username = usernameE.val();
+       var password = passwordE.val();
+
+       $.ajax({
+           url:'/signin/',
+           type:'POST',
+           data:{
+               'username':username,
+               'password':password,
+           },
+           success:function (data) {
+               if(data['code'] === 200){
+                   window.location = '/';
+               }else{
+                   var message = data['message'];
+                   $("#message-p").html(message);
+                   $("#message-p").show();
+               }
+           }
+       });
+
+   })
+});
+</script>
+  </body>
+</html>
+

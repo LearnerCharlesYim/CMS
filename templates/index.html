@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="sub-header">个人主页</h2>
+            <form class="form-inline">
+                  <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail3"></label>
+                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="请输入COF名">
+                  </div>
+                    <!-- Button trigger modal -->
+
+                  <button type="submit" class="btn btn-default">搜索</button>
+                  <button style="float: right" class="btn btn-default">查看所有数据</button>
+                  <button type="button" style="float: right;margin-right: 10px" class="btn btn-primary open-modal" data-toggle="modal" data-target="#myModal">
+                  新增COF名
+                </button>
+                </form>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>COF名</th>
+                  <th>连接方式</th>
+                  <th>理论维度</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for cof in cofs %}
+                <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'cof_detail' cof_id=cof.id %}">{{ cof.name }}</a></td>
+                <td>{{ cof.connection }}</td>
+                <td>{{ cof.dimension }}</td>
+                <td>
+                    <button type="submit" class="btn btn-primary btn-xs edit-btn">修改</button>
+                    <button type="button" data-id="{{ cof.id }}" class="btn btn-danger btn-xs delete-btn" data-toggle="modal" data-target="#delete-modal">删除</button>
+                </td>
+                </tr>
+              {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">新增COF名</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+    <label for="exampleInputEmail1">COF名</label>
+    <input type="text" name="name" class="form-control" placeholder="COF名">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">连接方式</label>
+    <input type="text" name="connection" class="form-control" placeholder="连接方式">
+  </div>
+          <div class="form-group">
+    <label for="exampleInputPassword1">理论维度</label>
+    <input type="text" name="dimension" class="form-control" placeholder="理论维度">
+  </div>
+       </div>
+      <div class="modal-footer">
+        <button type="button" id="close-btn" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="add-btn" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Small modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">删除确认</h4>
+     </div>
+         <div class="modal-body">
+            <div class="form-group">
+            <label for="exampleInputPassword1">请输入“立即删除”</label>
+            <input type="text" name="confirm" class="form-control">
+             <input type="hidden" name="data_id">
+          </div>
+         </div>
+         <div class="modal-footer">
+        <button type="button" id="close-btn" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" id="delete-btn" class="btn btn-primary">删除</button>
+      </div>
+
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block script %}
+<script>
+      $(function () {
+            $('.open-modal').click(function () {
+                $('#myModalLabel').text('新增COF名');
+                $('#close-btn').next().attr('id','add-btn');
+                var dialog = $("#myModal");
+                dialog.find('input[name="name"]').val('');
+                dialog.find('input[name="connection"]').val('');
+                dialog.find('input[name="dimension"]').val('');
+            });
+            $('.edit-btn').click(function () {
+                var self = $(this);
+                var name = self.parent().prev().prev().prev().text();
+                var connection = self.parent().prev().prev().text();
+                var dimension = self.parent().prev().text();
+                var dialog = $("#myModal");
+                dialog.find('input[name="name"]').val(name);
+                dialog.find('input[name="connection"]').val(connection);
+                dialog.find('input[name="dimension"]').val(dimension);
+                dialog.modal("show");
+                $('#myModalLabel').text('修改COF名');
+                $('#close-btn').next().attr('id','edit-btn');
+
+            });
+            $('.delete-btn').click(function () {
+                var dialog = $("#delete-modal");
+                dialog.find('input[name="data_id"]').val($(this).attr('data-id'));
+
+            });
+            $('#delete-btn').click(function () {
+                var self = $(this);
+                var dialog = $("#delete-modal");
+                var confirm = dialog.find('input[name="confirm"]').val();
+                var data_id = dialog.find('input[name="data_id"]').val();
+                if(confirm !== '立即删除'){
+                    alert('请输入正确内容');
+                    return;
+                }
+                $.ajax({
+                    url:'/delete_cof/',
+                    type:'POST',
+                    data:{
+                        'data_id':data_id
+                    },
+                    success:function (res) {
+                        if(res.code === 200){
+                            alert('删除成功');
+                            window.location.reload();
+                        }
+                    }
+                })
+            })
+        });
+
+      $(function () {
+          $('#add-btn').click(function () {
+              var self = $(this);
+              var name = $('input[name="name"]').val();
+              var connection = $('input[name="connection"]').val();
+              var dimension = $('input[name="dimension"]').val();
+              $.ajax({
+                  url:'/add_cof/',
+                  type:'POST',
+                  data:{
+                      'name':name,
+                      'connection':connection,
+                      'dimension':dimension
+                  },
+                  success:function (res) {
+                      if(res.code === 200){
+                          var dialog = $("#myModal");
+                            dialog.modal("hide");
+                            alert('添加成功');
+                            window.location.reload();
+                      }
+                  }
+              })
+          })
+      });
+  </script>
+{% endblock %}

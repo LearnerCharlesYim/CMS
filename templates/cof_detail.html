@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<h2 class="sub-header">{{ cof.name }}数据页</h2>
+            <form class="form-inline">
+                  <div class="form-group">
+                    <label class="sr-only" for="exampleInputEmail3"></label>
+                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="请输入">
+                  </div>
+                    <!-- Button trigger modal -->
+
+                  <button type="submit" class="btn btn-default">搜索</button>
+                  <a href="{% url 'cof_ext' cof_id=cof.id %}" type="button" style="float: right;margin-right: 10px" class="btn btn-primary">
+                 新增实验数据
+                </a>
+                </form>
+
+        <table style="margin-top: 10px;" class="table table-bordered">
+            <tr>
+                <td style="width: 180px"><b>编号</b></td>
+
+            </tr>
+            <tr>
+                <td><b>连接方式</b></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><b>理论维度</b></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><b>单体1(mmol)</b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>单体1名称</b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>单体1结构</b></td>
+            </tr>
+            <tr>
+                <td><b>溶剂1名称</b></td>
+            </tr>
+             <tr>
+                <td><b>溶剂1(ml)</b></td>
+            </tr>
+             <tr>
+                <td><b>AcOH浓度</b></td>
+            </tr>
+             <tr>
+                <td><b>AcOH量(ml)</b></td>
+            </tr>
+             <tr>
+                <td><b>温度(℃)</b></td>
+            </tr>
+             <tr>
+                <td><b>时间(h)</b></td>
+            </tr>
+             <tr>
+                <td><b>是否有固体</b></td>
+            </tr>
+            <tr>
+                <td><b>是否有晶体</b></td>
+            </tr>
+            <tr>
+                <td><b>PXRD主峰高度</b></td>
+            </tr>
+            <tr>
+                <td><b>管理操作</b></td>
+            </tr>
+
+
+        </table>
+</div>
+{% endblock %}

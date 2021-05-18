@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h2>新增数据</h2>
+    <form action="" method="post">
+
+
+<table style="margin-top: 10px;width: 500px" class="table table-bordered">
+            <tr>
+                <td style="width: 200px"><b>编号</b></td>
+                <td><input type="text" name="number" placeholder="编号"></td>
+
+            </tr>
+            <tr>
+                <td><b>连接方式</b></td>
+                <td>{{ cof.connection }}</td>
+
+            </tr>
+            <tr>
+                <td><b>理论维度</b></td>
+                <td>{{ cof.dimension }}</td>
+
+            </tr>
+
+            <tr>
+                <td><b>单体(mmol)</b></td>
+                <td><input type="text" name="danti" placeholder="单体(mmol)"></td>
+            </tr>
+            <tr>
+                <td><b>单体名称</b></td>
+                <td><input type="text" name="danti_name" placeholder="单体名称"></td>
+            </tr>
+            <tr id="danti">
+                <td><b>单体结构</b></td>
+                <td><input type="text" name="danti_structure" placeholder="单体结构"></td>
+                <td><button>+</button></td>
+            </tr>
+            <tr></tr>
+
+
+            <tr>
+                <td><b>溶剂名称</b></td>
+                <td><input type="text" name="rongji_name" placeholder="溶剂名称"></td>
+            </tr>
+             <tr id="rongji">
+                <td><b>溶剂(ml)</b></td>
+                 <td><input type="text" name="rongji_ml" placeholder="溶剂(ml)"></td>
+                  <td><button>+</button></td>
+            </tr>
+             <tr>
+                <td><b>AcOH浓度</b></td>
+                 <td><input type="text" name="acohnongdu" placeholder="AcOH浓度"></td>
+            </tr>
+             <tr id="cuihuaji">
+                <td><b>AcOH量(ml)</b></td>
+                <td><input type="text" name="acohliang" placeholder="AcOH量(ml)"></td>
+                  <td><button>+</button></td>
+            </tr>
+             <tr>
+                <td><b>温度(℃)</b></td>
+                <td><input type="text" name="temperature" placeholder="温度(℃)"></td>
+            </tr>
+             <tr>
+                <td><b>时间(h)</b></td>
+                <td><input type="text" name="time" placeholder="时间(h)"></td>
+            </tr>
+             <tr>
+                <td><b>是否有固体</b></td>
+              <td>
+                  <select style="width: 60px" name="is_solid" id="">
+                      <option value="1">是</option>
+                      <option value="0">否</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+                <td><b>是否有晶体</b></td>
+               <td>
+                   <select style="width: 60px" name="is_crystal" id="">
+                      <option value="1">是</option>
+                      <option value="0">否</option>
+                  </select>
+               </td>
+            </tr>
+            <tr>
+                <td><b>PXRD主峰高度</b></td>
+                <td><input type="text" name="pxrd" placeholder="PXRD主峰高度"></td>
+
+            </tr>
+            <tr>
+                <td><b>ssnmr半峰宽(PPM)</b></td>
+                    <td><input type="text" name="ssnmr" placeholder="ssnmr半峰宽(PPM)"></td>
+            </tr>
+            <tr>
+                <td><b>HP129Xe位移(PPM)</b></td>
+                    <td><input type="text" name="hp129" placeholder="HP129Xe位移(PPM)"></td>
+            </tr>
+            <tr>
+                <td><b>封管129Xe位移(PPM)</b></td>
+                <td><input type="text" name="fengguan129" placeholder="封管129Xe位移(PPM)"></td>
+            </tr>
+            <tr>
+                <td><b>孔径大小(nm)</b></td>
+                <td><input type="text" name="kongjing" placeholder="孔径大小(nm)"></td>
+            </tr>
+            <tr>
+                <td><b>BET比表面积</b></td>
+                <td><input type="text" name="bet" placeholder="BET比表面积"></td>
+            </tr>
+            <tr>
+                <td><b>理论结构图</b></td>
+                  <td><input type="file" enctype="multipart/form-data" name="graph" placeholder="理论结构图"></td>
+            </tr>
+            <tr>
+                <td><b>结构CIF</b></td>
+                  <td><input type="file" enctype="multipart/form-data" name="cif" placeholder="结构CIF"></td>
+            </tr>
+            <tr>
+                <td><b>PXRD图</b></td>
+                <td><input type="file" enctype="multipart/form-data" name="graphpxrd" placeholder="PXRD图"></td>
+            </tr>
+            <tr>
+                <td><b>其他文件</b></td>
+                <td>
+                   <input type="file" enctype="multipart/form-data" name="other" placeholder="ssnmr半峰宽(PPM)"></td>
+            </tr>
+            <tr>
+                <td><b>备注</b></td>
+                <td><input type="other" name="remark" placeholder="备注"></td>
+            </tr>
+
+        </table>
+
+    <button type="submit" style="margin-left: 400px" class="btn btn-primary">提交</button>
+</form>
+</div>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+    $(function () {
+        var tr_danti = $('#danti');
+        tr_danti.find('button').click(function (event) {
+            event.preventDefault();
+            tr_danti.after(`
+                                <tr>
+                <td><b>单体(mmol)</b></td>
+                <td><input type="text" name="danti" placeholder="单体1(mmol)"></td>
+            </tr>
+            <tr>
+                <td><b>单体名称</b></td>
+                <td><input type="text" name="danti_name" placeholder="单体名称"></td>
+            </tr>
+            <tr id="danti">
+                <td><b>单体结构</b></td>
+                <td><input type="text" name="danti_structure" placeholder="单体结构"></td>
+
+            </tr>
+            `)
+        });
+
+        var tr_rongji = $('#rongji');
+        tr_rongji.find('button').click(function (event) {
+            event.preventDefault();
+            tr_rongji.after(`
+                    <tr>
+                <td><b>溶剂名称</b></td>
+                <td><input type="text" name="rongji_name" placeholder="溶剂名称"></td>
+            </tr>
+             <tr id="rongji">
+                <td><b>溶剂(ml)</b></td>
+                 <td><input type="text" name="rongji_ml" placeholder="溶剂(ml)"></td>
+
+            </tr>
+            `)
+        });
+
+        var tr_cuihuaji = $('#cuihuaji');
+        tr_cuihuaji.find('button').click(function (event) {
+            event.preventDefault();
+            tr_cuihuaji.after(`
+                <tr>
+                <td><b>催化剂名称或CAS</b></td>
+                <td><input type="text" name="cuihuaji" placeholder="催化剂名称或CAS"></td>
+            </tr>
+             <tr id="rongji">
+                <td><b>催化剂量(mg)</b></td>
+                 <td><input type="text" name="cuihuaji_mg" placeholder="催化剂量(mg)"></td>
+
+            </tr>
+
+            `)
+        });
+
+
+    });
+    </script>
+{% endblock %}

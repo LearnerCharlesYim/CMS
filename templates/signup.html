@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CMS管理系统</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'auth.css' %}" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-signin" method="post">
+        <h2 class="form-signin-heading">请注册</h2>
+        <label for="inputEmail" class="sr-only">用户名</label>
+        <input type="text"  class="form-control" name='username' placeholder="用户名" >
+          <label for="inputEmail" class="sr-only">姓名</label>
+        <input style="margin-top: 10px" type="text"  class="form-control" name='name' placeholder="姓名" >
+         <label for="inputPassword" class="sr-only">密码</label>
+         <input style="margin-top: 10px" type="password" class="form-control" name='password' placeholder="密码" >
+            <label for="inputPassword" class="sr-only">确认密码</label>
+         <input type="password" class="form-control" name='password1' placeholder="确认密码" >
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">立即注册</button>
+          <div style="text-align: center;margin-top: 10px;" class="form-group">
+                <a href="{% url 'signin' %}" class="sign-link">已有账号？立即登录</a>
+
+            </div>
+      </form>
+    </div>
+    <p style="display:none;color:red;text-align:center;" class="text-danger" id="message-p"></p>
+  <script>
+$(function () {
+   $("#submit").click(function (event) {
+       event.preventDefault();
+       var usernameE = $("input[name='username']");
+       var nameE = $("input[name='name']");
+       var passwordE = $("input[name='password']");
+       var password1E = $("input[name='password1']");
+       var username = usernameE.val();
+       var name = nameE.val();
+       var password = passwordE.val();
+       var password1 = password1E.val();
+        if (password !== password1){
+            alert('两次密码不一致');
+            return;
+        }
+       $.ajax({
+           url:'/signup/',
+           type:'POST',
+           data:{
+               'username':username,
+               'name':name,
+               'password':password
+           },
+           success:function (data) {
+               if(data['code'] === 200){
+                   alert('注册成功');
+                   window.location = '/signin';
+               }else{
+                   var message = data['message'];
+                   $("#message-p").html(message);
+                   $("#message-p").show();
+               }
+           }
+       });
+
+   })
+});
+</script>
+  </body>
+</html>
+
