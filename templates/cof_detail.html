@@ -9,7 +9,6 @@
                     <input type="email" class="form-control" id="exampleInputEmail3" placeholder="请输入">
                   </div>
                     <!-- Button trigger modal -->
-
                   <button type="submit" class="btn btn-default">搜索</button>
                   <a href="{% url 'cof_ext' cof_id=cof.id %}" type="button" style="float: right;margin-right: 10px" class="btn btn-primary">
                  新增实验数据
@@ -19,21 +18,41 @@
         <table style="margin-top: 10px;" class="table table-bordered">
             <tr>
                 <td style="width: 180px"><b>编号</b></td>
+                {% for cofext in cofexts %}
+                    <td>
+                    {{ cofext.number }}
+                    </td>
+                {% endfor %}
+
 
             </tr>
             <tr>
                 <td><b>连接方式</b></td>
-                <td></td>
+
+                    {% for cofext in cofexts %}
+                        <td>
+                        {{ cofext.cof.connection }}
+
+                        </td>
+                    {% endfor %}
+
 
             </tr>
             <tr>
                 <td><b>理论维度</b></td>
-                <td></td>
+
+                    {% for cofext in cofexts %}
+                        <td>
+                        {{ cofext.cof.dimension }}
+                        </td>
+                    {% endfor %}
 
             </tr>
             <tr>
                 <td><b>单体1(mmol)</b></td>
-                <td></td>
+                <td>
+
+                </td>
             </tr>
             <tr>
                 <td><b>单体1名称</b></td>
