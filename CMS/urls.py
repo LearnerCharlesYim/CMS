@@ -24,7 +24,10 @@ urlpatterns = [
     path('signin/', views.signin,name='signin'),
     path('logout/', views.logout,name='logout'),
     path('add_cof/', views.add_cof,name='add_cof'),
+    path('edit_cof/', views.edit_cof,name='edit_cof'),
     path('delete_cof/', views.delete_cof,name='delete_cof'),
     path('cof/<cof_id>', views.cof_detail,name='cof_detail'),
     path('cof_ext/<cof_id>', views.add_cof_ext,name='cof_ext'),
+    path('delete_cofext/', views.delete_cofext,name='delete_cofext'),
+    path('edit_cofext/<cofext_id>', views.edit_cofext,name='edit_cofext'),
 ]

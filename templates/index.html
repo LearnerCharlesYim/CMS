@@ -2,15 +2,14 @@
 {% block main %}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h2 class="sub-header">个人主页</h2>
-            <form class="form-inline">
+            <form class="form-inline" method="get">
                   <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail3"></label>
-                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="请输入COF名">
+                    <input type="text" name="kw" class="form-control" id="exampleInputEmail3" placeholder="请输入COF名">
                   </div>
                     <!-- Button trigger modal -->
 
                   <button type="submit" class="btn btn-default">搜索</button>
-                  <button style="float: right" class="btn btn-default">查看所有数据</button>
                   <button type="button" style="float: right;margin-right: 10px" class="btn btn-primary open-modal" data-toggle="modal" data-target="#myModal">
                   新增COF名
                 </button>
@@ -34,7 +33,7 @@
                 <td>{{ cof.connection }}</td>
                 <td>{{ cof.dimension }}</td>
                 <td>
-                    <button type="submit" class="btn btn-primary btn-xs edit-btn">修改</button>
+                    <button type="submit" data-id="{{ cof.id }}" class="btn btn-primary btn-xs edit-btn">修改</button>
                     <button type="button" data-id="{{ cof.id }}" class="btn btn-danger btn-xs delete-btn" data-toggle="modal" data-target="#delete-modal">删除</button>
                 </td>
                 </tr>
@@ -112,6 +111,7 @@
             });
             $('.edit-btn').click(function () {
                 var self = $(this);
+                var id = self.attr('data-id');
                 var name = self.parent().prev().prev().prev().text();
                 var connection = self.parent().prev().prev().text();
                 var dimension = self.parent().prev().text();
@@ -121,7 +121,8 @@
                 dialog.find('input[name="dimension"]').val(dimension);
                 dialog.modal("show");
                 $('#myModalLabel').text('修改COF名');
-                $('#close-btn').next().attr('id','edit-btn');
+                $('#close-btn').next().attr('id','edit-btn').attr('data-id',id);
+
 
             });
             $('.delete-btn').click(function () {
@@ -155,7 +156,7 @@
         });
 
       $(function () {
-          $('#add-btn').click(function () {
+          $('#myModal').on('click','#add-btn',function () {
               var self = $(this);
               var name = $('input[name="name"]').val();
               var connection = $('input[name="connection"]').val();
@@ -177,7 +178,33 @@
                       }
                   }
               })
-          })
+          });
+
+          $('#myModal').on('click','#edit-btn',function () {
+              var self = $(this);
+              var name = $('input[name="name"]').val();
+              var connection = $('input[name="connection"]').val();
+              var dimension = $('input[name="dimension"]').val();
+              $.ajax({
+                  url:'/edit_cof/',
+                  type:'POST',
+                  data:{
+                      'id':self.attr('data-id'),
+                      'name':name,
+                      'connection':connection,
+                      'dimension':dimension
+                  },
+                  success:function (res) {
+                      if(res.code === 200){
+                          var dialog = $("#myModal");
+                            dialog.modal("hide");
+                            alert('修改成功');
+                            window.location.reload();
+                      }
+                  }
+              })
+          });
+
       });
   </script>
 {% endblock %}

@@ -3,10 +3,10 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
 <h2 class="sub-header">{{ cof.name }}数据页</h2>
-            <form class="form-inline">
+            <form class="form-inline" method="get">
                   <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail3"></label>
-                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="请输入">
+                    <input type="text" name="kw" class="form-control" id="exampleInputEmail3" placeholder="请输入">
                   </div>
                     <!-- Button trigger modal -->
                   <button type="submit" class="btn btn-default">搜索</button>
@@ -16,83 +16,64 @@
                 </form>
 
         <table style="margin-top: 10px;" class="table table-bordered">
+        <thead>
+        <th>编号</th>
+        <th>单体1(mmol)</th>
+        <th>单体1名称</th>
+        <th>单体1结构</th>
+        <th>溶剂1名称</th>
+        <th>溶剂1(ml)</th>
+        <th>AcOH浓度</th>
+        <th>AcOH量(ml)</th>
+        <th>温度(℃)</th>
+        <th>时间(h)</th>
+        <th>是否有固体</th>
+        <th>是否有晶体</th>
+        <th>PXRD主峰高度</th>
+        <th>操作</th>
+        </thead>
+            <tbody>
+            {% for cofext in cofexts %}
             <tr>
-                <td style="width: 180px"><b>编号</b></td>
-                {% for cofext in cofexts %}
-                    <td>
-                    {{ cofext.number }}
-                    </td>
-                {% endfor %}
-
-
+            <td>{{ cofext.number }}</td>
+            <td>{{ cofext.danti_set.first.danti }}</td>
+            <td>{{ cofext.danti_set.first.name }}</td>
+            <td>{{ cofext.danti_set.first.structure }}</td>
+            <td>{{ cofext.rongji_set.first.name }}</td>
+            <td>{{ cofext.rongji_set.first.rongjiml }}</td>
+            <td>{{ cofext.acohnongdu }}</td>
+            <td>{{ cofext.acohliang }}</td>
+            <td>{{ cofext.temperature }}</td>
+            <td>{{ cofext.time }}</td>
+            <td>{% if cofext.is_solid == 1 %}Y{% else %}N {% endif %}</td>
+            <td>{% if cofext.is_crystal == 1 %}Y{% else %}N {% endif %}</td>
+            <td>{{ cofext.pxrd }}</td>
+            <td>
+                <a href="{% url 'edit_cofext' cofext_id=cofext.id %}" type="button" class="btn btn-primary btn-xs">修改</a>
+                <button data-id="{{ cofext.id }}" type="button" class="btn btn-primary btn-xs delete">删除</button>
+            </td>
             </tr>
-            <tr>
-                <td><b>连接方式</b></td>
-
-                    {% for cofext in cofexts %}
-                        <td>
-                        {{ cofext.cof.connection }}
-
-                        </td>
-                    {% endfor %}
-
-
-            </tr>
-            <tr>
-                <td><b>理论维度</b></td>
-
-                    {% for cofext in cofexts %}
-                        <td>
-                        {{ cofext.cof.dimension }}
-                        </td>
-                    {% endfor %}
-
-            </tr>
-            <tr>
-                <td><b>单体1(mmol)</b></td>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <td><b>单体1名称</b></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><b>单体1结构</b></td>
-            </tr>
-            <tr>
-                <td><b>溶剂1名称</b></td>
-            </tr>
-             <tr>
-                <td><b>溶剂1(ml)</b></td>
-            </tr>
-             <tr>
-                <td><b>AcOH浓度</b></td>
-            </tr>
-             <tr>
-                <td><b>AcOH量(ml)</b></td>
-            </tr>
-             <tr>
-                <td><b>温度(℃)</b></td>
-            </tr>
-             <tr>
-                <td><b>时间(h)</b></td>
-            </tr>
-             <tr>
-                <td><b>是否有固体</b></td>
-            </tr>
-            <tr>
-                <td><b>是否有晶体</b></td>
-            </tr>
-            <tr>
-                <td><b>PXRD主峰高度</b></td>
-            </tr>
-            <tr>
-                <td><b>管理操作</b></td>
-            </tr>
+            {% endfor %}
+            </tbody>
 
 
         </table>
 </div>
+    <script>
+    $('.delete').click(function () {
+        var self = $(this);
+        $.ajax({
+            url:'/delete_cofext/',
+            type:'POST',
+            data:{
+                'cofext_id':self.attr('data-id')
+            },
+            success:function (res) {
+                if(res.code === 200){
+                    window.location.reload();
+                }
+            }
+        })
+    })
+    </script>
 {% endblock %}

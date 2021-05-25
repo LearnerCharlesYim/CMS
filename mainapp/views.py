@@ -33,6 +33,13 @@ def signin(request):
 
 def index(request):
     if request.cmsuser:
+        kw = request.GET.get('kw')
+        if kw:
+            cof = Cof.objects.filter(name=kw.strip()).first()
+            if cof:
+                return redirect(reverse('cof_detail',kwargs={'cof_id':cof.id}))
+            else:
+                return render(request, 'index.html', context={'user': request.cmsuser})
         cofs = Cof.objects.all()
         return render(request,'index.html',context={'user':request.cmsuser,'cofs':cofs})
     else:
@@ -60,10 +67,28 @@ def delete_cof(request):
         cof.delete()
         return JsonResponse({'code':200,'message':''})
 
+def edit_cof(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        name = request.POST.get('name')
+        connection = request.POST.get('connection')
+        dimension = request.POST.get('dimension')
+        cof = Cof.objects.get(id=id)
+        cof.name = name
+        cof.connection = connection
+        cof.dimension = dimension
+        cof.save()
+        return JsonResponse({'code':200,'message':''})
+
 def cof_detail(request,cof_id):
+    kw = request.GET.get('kw')
+    if kw:
+        print(kw)
     cof = Cof.objects.get(id=cof_id)
     cofexts = cof.cofextension_set.all()
+
     return render(request,'cof_detail.html',context={'cof':cof,'cofexts':cofexts})
+
 
 def add_cof_ext(request,cof_id):
     if request.method == 'GET':
@@ -147,3 +172,97 @@ def add_cof_ext(request,cof_id):
                 cuihuaji_.save()
 
         return redirect(reverse('cof_detail',kwargs={"cof_id":cof_id}))
+
+def delete_cofext(request):
+    if request.method == 'POST':
+        cofext_id = request.POST.get('cofext_id')
+        cofext = Cofextension.objects.get(id=cofext_id)
+        cofext.delete()
+        return JsonResponse({'code':200,'message':''})
+
+def edit_cofext(request,cofext_id):
+    cofext = Cofextension.objects.get(id=cofext_id)
+    if request.method == 'GET':
+        return render(request,'edit_cofext.html',context={'cofext':cofext})
+    else:
+        number = request.POST.get('number')
+
+        danti = request.POST.getlist('danti')
+        danti_name = request.POST.getlist('danti_name')
+        danti_structure = request.POST.getlist('danti_structure')
+
+        rongji_name = request.POST.getlist('rongji_name')
+        rongji_ml = request.POST.getlist('rongji_ml')
+
+        cuihuaji = request.POST.getlist('cuihuaji')
+        cuihuaji_mg = request.POST.getlist('cuihuaji_mg')
+
+        acohnongdu = request.POST.get('acohnongdu')
+        acohliang = request.POST.get('acohliang')
+        temperature = request.POST.get('temperature')
+        time = request.POST.get('time')
+        is_solid = request.POST.get('is_solid')
+        is_crystal = request.POST.get('is_crystal')
+        pxrd = request.POST.get('pxrd')
+        ssnmr = request.POST.get('ssnmr')
+        hp129 = request.POST.get('hp129')
+        fengguan129 = request.POST.get('fengguan129')
+        kongjing = request.POST.get('kongjing')
+        bet = request.POST.get('bet')
+
+        graph = request.FILES.get('graph')
+        cif = request.FILES.get('cif')
+        graphpxrd = request.FILES.get('graphpxrd')
+        other = request.FILES.get('other')
+
+        remark = request.POST.get('remark')
+
+        cofext.number = number
+        cofext.acohnongdu = acohnongdu
+        cofext.acohliang = acohliang
+        cofext.temperature = temperature
+        cofext.time = time
+        cofext.is_solid = is_solid
+        cofext.is_crystal = is_crystal
+        cofext.pxrd = pxrd
+        cofext.hp129 = hp129
+        cofext.ssnmr = ssnmr
+        cofext.fengguan129 = fengguan129
+        cofext.kongjing = kongjing
+        cofext.bet = bet
+        cofext.graph = graph.name if graph else None
+        cofext.cif = cif.name if cif else None
+        cofext.graphpxrd = graphpxrd.name if graphpxrd else None
+        cofext.other = other.name if other else None
+        cofext.remark = remark
+
+        cofext.save()
+
+        if not danti == ['']:
+            danti_list = list(zip(danti, danti_name, danti_structure))
+            a = list(zip(danti_list,cofext.danti_set.all()))
+            for item in a:
+                item[-1].danti = item[0][0]
+                item[-1].name = item[0][1]
+                item[-1].structure = item[0][2]
+                item[-1].save()
+
+        if not rongji_name == ['']:
+            rongji_list = list(zip(rongji_name, rongji_ml))
+            a = list(zip(rongji_list, cofext.rongji_set.all()))
+            for item in a:
+                item[-1].danti = item[0][0]
+                item[-1].name = item[0][1]
+                item[-1].structure = item[0][2]
+                item[-1].save()
+
+        if not cuihuaji == ['']:
+            cuihuaji_list = list(zip(cuihuaji, cuihuaji_mg))
+            a = list(zip(cuihuaji_list, cofext.cuihuaji_set.all()))
+            for item in a:
+                item[-1].danti = item[0][0]
+                item[-1].name = item[0][1]
+                item[-1].structure = item[0][2]
+                item[-1].save()
+
+        return redirect(reverse('cof_detail',kwargs={"cof_id":cofext.cof.id}))
