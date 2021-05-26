@@ -2,7 +2,7 @@
 {% block main %}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h2>修改数据</h2>
-    <form action="" method="post">
+    <form action="" enctype="multipart/form-data" method="post">
 
 
 <table style="margin-top: 10px;width: 500px" class="table table-bordered">
@@ -111,7 +111,9 @@
             </tr>
             <tr>
                 <td><b>理论结构图</b></td>
-                  <td><input type="file" enctype="multipart/form-data" name="graph" placeholder="理论结构图"></td>
+
+                  <td><input type="file" name="graph" placeholder="理论结构图"></td>
+
             </tr>
             <tr>
                 <td><b>结构CIF</b></td>

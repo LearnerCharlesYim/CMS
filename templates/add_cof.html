@@ -2,9 +2,11 @@
 {% block main %}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h2>新增数据</h2>
-    <form action="" method="post">
+    <form action="" enctype="multipart/form-data" method="post">
 
-
+{% if error %}
+<p style="color: red">{{ error }}</p>
+{% endif %}
 <table style="margin-top: 10px;width: 500px" class="table table-bordered">
             <tr>
                 <td style="width: 200px"><b>编号</b></td>

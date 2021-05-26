@@ -6,7 +6,7 @@
             <form class="form-inline" method="get">
                   <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail3"></label>
-                    <input type="text" name="kw" class="form-control" id="exampleInputEmail3" placeholder="请输入">
+                    <input type="text" name="kw" class="form-control"  placeholder="请输入关键字">
                   </div>
                     <!-- Button trigger modal -->
                   <button type="submit" class="btn btn-default">搜索</button>
@@ -14,7 +14,11 @@
                  新增实验数据
                 </a>
                 </form>
+        {% if error %}
+            <p>{{ error }}  </p>
+        {% endif %}
 
+        {% if cofexts %}
         <table style="margin-top: 10px;" class="table table-bordered">
         <thead>
         <th>编号</th>
@@ -56,8 +60,323 @@
             {% endfor %}
             </tbody>
 
-
         </table>
+        {% endif %}
+
+        {% if dantis %}
+        搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                {% for danti in dantis %}
+                        <th>编号</th>
+                    {% for item in danti.danti_set.all %}
+                        <th>单体{{ forloop.counter }}(mmol)</th>
+                        <th>单体{{ forloop.counter }}名称</th>
+                        <th>单体{{ forloop.counter }}结构</th>
+                    {% endfor %}
+                    <tbody>
+
+                        <tr>
+                            <td>{{ danti.number }}</td>
+                    {% for item in danti.danti_set.all %}
+                        <td>{{ item.danti }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.structure }}</td>
+                    {% endfor %}
+                        </tr>
+                    </tbody>
+                {% endfor %}
+                </table>
+        {% endif %}
+
+          {% if rongjis %}
+        搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                {% for rongji in rongjis %}
+                        <th>编号</th>
+                    {% for item in rongji.rongji_set.all %}
+                        <th>溶剂{{ forloop.counter }}名称</th>
+                        <th>溶剂{{ forloop.counter }}(ml)</th>
+
+                    {% endfor %}
+                    <tbody>
+
+                        <tr>
+                            <td>{{ rongji.number }}</td>
+                    {% for item in rongji.rongji_set.all %}
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.rongjiml }}</td>
+
+                    {% endfor %}
+                        </tr>
+                    </tbody>
+                {% endfor %}
+                </table>
+        {% endif %}
+
+            {% if acohs %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>AcOH浓度</th>
+                        <th>AcOH量(ml)</th>
+                </thead>
+                      {% for acoh in acohs %}
+                            <tr>
+                            <td>{{ acoh.number }}</td>
+                            <td>{{ acoh.acohnongdu }}</td>
+                            <td>{{ acoh.acohliang }}</td>
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+
+              {% if temperatures %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>温度(℃)</th>
+
+                </thead>
+                      {% for temperature in temperatures %}
+                            <tr>
+                            <td>{{ temperature.number }}</td>
+                            <td>{{ temperature.temperature }}</td>
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+              {% if times %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>时间(h)</th>
+
+                </thead>
+                      {% for time in times %}
+                            <tr>
+                            <td>{{ time.number }}</td>
+                            <td>{{ time.time }}</td>
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if pxrds %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>PXRD主峰高度</th>
+
+                </thead>
+                      {% for pxrd in pxrds %}
+                            <tr>
+                            <td>{{ pxrd.number }}</td>
+                            <td>{{ pxrd.pxrd }}</td>
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if ssnmrs %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>ssnmr半峰宽(PPM)</th>
+
+                </thead>
+                      {% for ssnmr in ssnmrs %}
+                            <tr>
+                            <td>{{ ssnmr.number }}</td>
+                            <td>{{ ssnmr.ssnmr }}</td>
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if hp129s %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>HP129Xe位移(PPM)</th>
+
+                </thead>
+                      {% for hp129 in hp129s %}
+                            <tr>
+                            <td>{{ hp129.number }}</td>
+                            <td>{{ hp129.hp129 }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if 129xes %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>封管129Xe位移(PPM)</th>
+
+                </thead>
+                      {% for 129xe in 129xes %}
+                            <tr>
+                            <td>{{ 129xe.number }}</td>
+                            <td>{{ 129xe.fengguan129 }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if kongjings %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>孔径大小(nm)</th>
+
+                </thead>
+                      {% for kongjing in kongjings %}
+                            <tr>
+                            <td>{{ kongjing.number }}</td>
+                            <td>{{ kongjing.kongjing }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                  {% if bets %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>BET比表面积</th>
+
+                </thead>
+                      {% for bet in bets %}
+                            <tr>
+                            <td>{{ bet.number }}</td>
+                            <td>{{ bet.bet }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                 {% if graphs %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>理论结构图</th>
+
+                </thead>
+                      {% for graph in graphs %}
+                            <tr>
+                            <td>{{ graph.number }}</td>
+                            <td>{{ graph.graph }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                 {% if cifs %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>结构CIF</th>
+
+                </thead>
+                      {% for cif in cifs %}
+                            <tr>
+                            <td>{{ cif.number }}</td>
+                            <td>{{ cif.cif }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+
+                 {% if pxrdgraphs %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>PXRD图</th>
+
+                </thead>
+                      {% for pxrdgraph in pxrdgraphs %}
+                            <tr>
+                            <td>{{ pxrdgraph.number }}</td>
+                            <td>{{ pxrdgraph.graphpxrd }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                 {% if others %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>其他</th>
+
+                </thead>
+                      {% for other in others %}
+                            <tr>
+                            <td>{{ other.number }}</td>
+                            <td>{{ other.other }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+                 {% if remarks %}
+              搜索结果:{{ kw }}
+                <table style="margin-top: 10px;" class="table table-bordered">
+                <thead>
+                <th>编号</th>
+                        <th>备注</th>
+
+                </thead>
+                      {% for remark in remarks %}
+                            <tr>
+                            <td>{{ remark.number }}</td>
+                            <td>{{ remark.remark }}</td>
+
+
+                            </tr>
+                      {% endfor %}
+                </table>
+            {% endif %}
+
+
 </div>
     <script>
     $('.delete').click(function () {
